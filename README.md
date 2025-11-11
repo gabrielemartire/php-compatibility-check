@@ -1,0 +1,2 @@
+# php-compatibility-check
+asd
