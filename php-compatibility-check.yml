@@ -1,0 +1,79 @@
+name: PHP Compatibility Check
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  php-5-4-shivammathur: # "runner" (un'istanza virtuale di macchina)
+    name: "Check compatibility with PHP 5.4"
+    runs-on: ubuntu-latest
+    steps: # tutti gli step saranno eseguiti nella stessa istanza virtuale
+      - name: Setup PHP 5.4
+        uses: shivammathur/setup-php@v2 # "setup-php" è un'azione di GitHub che permette di installare versioni specifiche di PHP
+        with:
+          php-version: "5.4" # versione di PHP da installare
+
+      - name: Check PHP version
+        run: |
+          bash --version
+          php -v
+          files=$(php -v | grep "PHP 5.4" || false)
+          if [ $files && $files  == *"PHP 5.4"* ]; then
+            echo "❌ No PHP 5.4 installed"
+            exit 1
+          else
+            echo $files 
+            echo "✓ PHP 5.4 is installed"
+          fi
+
+      - name: About PHP 5.4
+        run: echo "🐘 PHP 5.4 is so old, it probably still thinks the internet is a fad!"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+    
+
+      - name: Run PHP Syntax Check for ACM Files
+        run: |
+          find_syntax_mistake=false
+
+          git fetch origin
+          files=$(git diff origin/main --name-only --diff-filter=ACM | grep '\.php$' || true)
+
+          # Controlla se files è vuoto
+          if [ -z "$files" ]; then
+            echo "✅ No PHP files to check. Everything is OK!"
+            echo "Check if all pr files are in the list above (used for check compatibility)."
+            git diff origin/main --name-only
+            exit 0
+          else
+            echo "Found PHP files to check:"
+            echo "$files"
+          fi
+
+          # echo "🔷🔶"
+          for file in $files; do
+            error_file=$(php -l "$file")
+            if ! echo "$error_file" | grep -q "No syntax errors"; then
+              echo "⚠️ found error - path: $file"
+              echo "log: $error_file"
+              find_syntax_mistake=true
+            else
+              echo "No syntax errors in $file"
+            fi
+          done
+
+          if [ "$find_syntax_mistake" = true ]; then
+            echo "❌ Found Compatibility Error. Solve them before merging."
+            echo "TIP 1: Check if you have spaces in file .php name."
+            echo "TIP 2: Code might works but is not compatible with PHP 5.4"
+            echo "TIP 3: Check if all edited/added files are in the list above (used for check compatibility)."
+            echo "TIP 4: is you use PHP 5.2, some code could still not works."
+            git diff origin/main --name-only --diff-filter=ACM | grep '\.php$'
+            exit 1
+          else
+            echo "✅ No syntax errors found in any PHP files."
+            exit 0
+          fi
