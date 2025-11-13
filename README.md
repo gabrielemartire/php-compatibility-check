@@ -41,7 +41,7 @@ jobs:
 
 🔧 Customization:
 
-* `php-version` → with the PHP version you want to test (e.g. `6.2`, `7.1`, etc.)
+* `php-version` → with the PHP version you want to test (e.g. `6.2`, `7.1`, etc.) _find php [check versions supported here](https://github.com/shivammathur/setup-php?tab=readme-ov-file#tada-php-support)
 
 ## Method 2 — Direct Use in Your Repository
 
@@ -68,7 +68,7 @@ env:
 
 🔧 Customization:
 
-* `PHP_VERSION` → with the PHP version you want to test (e.g. `6.2`, `5.4`)
+* `PHP_VERSION` → with the PHP version you want to test (e.g. `6.2`, `5.4`) [check versions supported here](https://github.com/shivammathur/setup-php?tab=readme-ov-file#tada-php-support)
 
 _and leave everything else unchanged._
 
@@ -97,15 +97,15 @@ Error: Process completed with exit code 255.
 
 ---
 
-
 ## Suggestions
 
 Add to your README.md the badges
-_in Action tabs_
-<img width="303" height="181" alt="image" src="https://github.com/user-attachments/assets/614e61b5-d758-484a-95a5-89de1a26214f" />
 
 <img width="220" height="30" alt="image" src="https://github.com/user-attachments/assets/b9ba542c-fdde-4ece-a67c-c360912a5347" />
 <img width="226" height="28" alt="image" src="https://github.com/user-attachments/assets/7ba8598d-b9ca-4dd8-b12e-be3ba0fc0c9e" />
+
+_go in "Action" tab_
+<img width="303" height="181" alt="image" src="https://github.com/user-attachments/assets/614e61b5-d758-484a-95a5-89de1a26214f" />
 
 * Avoid spaces in `.php` file names.
 * Even if the code works in modern versions, it may not be compatible with legacy PHP versions like 5.4.
