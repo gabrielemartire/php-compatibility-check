@@ -53,28 +53,22 @@ on:
       - main
 ```
 
+> [!NOTE]
+> This will run the compatibility check on every push, excluding the main branch.
+
 _and_, changing the `env:` block as follows:
 
 ```yaml
 env:
   PHP_VERSION: '1.1'
 ```
-_change 1.1 with your remote php legacy version_
+_(e.g. 1.1) here you can use your remote php legacy version, **the version to be tested**_
 
-> [!NOTE]
-> This will run the compatibility check on every push, excluding the main branch.
-
-_and leave everything else unchanged._ If needed, modify the version to be tested by changing this variable at the beginning:
-
-```yaml
-env:
-  PHP_VERSION: "5.4"
-```
+_and leave everything else unchanged._
 
 ---
 
 ## Example Output
-
 
 ```text
 From https://github.com/<ORG>/<REPO>
