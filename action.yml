@@ -1,0 +1,80 @@
+name: 'PHP Compatibility Check'
+description: 'Check PHP syntax compatibility for modified files in pull requests'
+author: 'gabrielemartire'
+
+branding:
+  icon: 'check-circle'
+  color: 'purple'
+
+inputs:
+  php-version:
+    description: 'PHP version to check compatibility against (e.g., 7.4, 8.0, 8.1)'
+    required: true
+    default: '5.2'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup PHP ${{ inputs.php-version }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ inputs.php-version }}
+
+    - name: Check PHP version
+      shell: bash
+      run: |
+        bash --version
+        php -v
+        if php -v | grep -q "PHP ${{ inputs.php-version }}"; then
+          echo "✓ PHP ${{ inputs.php-version }} is installed"
+        else
+          echo "❌ PHP ${{ inputs.php-version }} not installed"
+          exit 1
+        fi
+
+    - name: About PHP ${{ inputs.php-version }}
+      shell: bash
+      run: echo "🐘 PHP ${{ inputs.php-version }} is so old, it probably still thinks the internet is a fad!"
+
+    - name: Run PHP Syntax Check for ACM Files
+      shell: bash
+      run: |
+        find_syntax_mistake=0
+        git fetch origin
+        files=$(git diff origin/main --name-only --diff-filter=ACM | grep '\.php$' || true)
+        
+        # Controlla se files è vuoto
+        if [ -z "$files" ]; then
+          echo "✅ No PHP files to check. Everything is OK!"
+          echo "Check if all pr files are in the list above (used for check compatibility)."
+          git diff origin/main --name-only
+          exit 0
+        else
+          echo "Found PHP files to check:"
+          echo "$files"
+        fi
+        
+        for file in $files; do
+          error_file=$(php -l "$file")
+          if ! echo "$error_file" | grep -q "No syntax errors"; then
+            echo "⚠️ found error - path: $file"
+            echo "log: $error_file"
+            find_syntax_mistake=1
+          else
+            echo "No syntax errors in $file"
+          fi
+        done
+        
+        if [ "$find_syntax_mistake" -eq 1 ]; then
+          echo "🔍 Checked $(echo "$files" | wc -l) PHP files."
+          echo "❌ Found Compatibility Error. Solve them before merging."
+          echo "TIP 1: Check if you have spaces in file .php name."
+          echo "TIP 2: Code might works but is not compatible with PHP ${{ inputs.php-version }}"
+          echo "TIP 3: Check if all edited/added files are in the list above (used for check compatibility)."
+          echo "TIP 4: Check if you are using PHP ${{ inputs.php-version }}."
+          git diff origin/main --name-only --diff-filter=ACM | grep '\.php$'
+          exit 1
+        else
+          echo "✅ No syntax errors found in any PHP files."
+          exit 0
+        fi
