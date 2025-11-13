@@ -16,9 +16,6 @@ $(git diff origin/main --name-only --diff-filter=ACM | grep '\.php$' || true)
 4. Performs a **syntax check (`php -l`)** on each file.
 5. If errors or incompatibilities are found, it **reporting the problematic files**.
 
-> [!NOTE]
-> It also includes several useful TIPS and explanatory comments in the code to help those working on legacy PHP projects.
-
 ## 🧩 Method 1 — Reusable Workflow
 
 1. In your repository, create a file like:
@@ -95,20 +92,20 @@ Error: Process completed with exit code 255.
 
 ## 💬 Suggestions
 
+Add to your README.md the badges
+_in Action tabs_
+<img width="303" height="181" alt="image" src="https://github.com/user-attachments/assets/614e61b5-d758-484a-95a5-89de1a26214f" />
+
+<img width="220" height="30" alt="image" src="https://github.com/user-attachments/assets/b9ba542c-fdde-4ece-a67c-c360912a5347" />
+<img width="226" height="28" alt="image" src="https://github.com/user-attachments/assets/7ba8598d-b9ca-4dd8-b12e-be3ba0fc0c9e" />
+
 * Avoid spaces in `.php` file names.
 * Even if the code works in modern versions, it may not be compatible with legacy PHP versions like 5.4.
 * Perfect for historical repositories, outdated systems, or validation environments.
 * The final workflow messages include automatic TIPS with possible causes of error.
 
-## Badge
+## 🙏 Acknowledgments
 
-<img width="220" height="30" alt="image" src="https://github.com/user-attachments/assets/b9ba542c-fdde-4ece-a67c-c360912a5347" />
+Special thanks to [shivammathur](https://github.com/shivammathur/setup-php) for `/setup-php` project — one of the fundamental actions that makes it possible to manage legacy PHP versions on GitHub Actions. 💙
 
-<img width="226" height="28" alt="image" src="https://github.com/user-attachments/assets/7ba8598d-b9ca-4dd8-b12e-be3ba0fc0c9e" />
-
-
-🙏 Acknowledgments
-
-Special thanks to the shivammathur/setup-php project — one of the fundamental actions that makes it possible to manage legacy PHP versions on GitHub Actions. 💙
-
-👷‍♂️ Made for developers who still use PHP legacy.
+$$DON'T·PANIC$$
