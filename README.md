@@ -30,10 +30,17 @@ on:
       - main
 
 jobs:
-  call-compatibility:
-    uses: gabrielemartire/php-compatibility-check/php-compatibility-check.yml@main
-    with:
-      php-version: '5.4'
+   check:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v4
+         with:
+           fetch-depth: 0  # importante per il git diff
+      
+       - name: Check PHP 7.4 Compatibility
+         uses: tuo-username/nome-repo@v1
+         with:
+           php-version: '7.4'
 ```
 
 > [!NOTE]
