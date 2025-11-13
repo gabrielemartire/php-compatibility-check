@@ -53,6 +53,14 @@ on:
       - main
 ```
 
+_and_, changing the `env:` block as follows:
+
+```yaml
+env:
+  PHP_VERSION: '1.1'
+```
+_change 1.1 with your remote php legacy version_
+
 > [!NOTE]
 > This will run the compatibility check on every push, excluding the main branch.
 
