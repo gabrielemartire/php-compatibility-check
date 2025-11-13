@@ -1,35 +1,39 @@
 name: PHP Compatibility Check
 
 on:
-  push:
-    branches-ignore:
-      - main
+  workflow_call:
+    inputs:
+      php-version:
+        required: true
+        type: string
+
+env:
+  PHP_VERSION: "5.4"
 
 jobs:
-  php-5-4-shivammathur: # "runner" (un'istanza virtuale di macchina)
-    name: "Check compatibility with PHP 5.4"
+  php-compatibility-check: # "runner" (un'istanza virtuale di macchina)
+    name: "Check compatibility with PHP ${{ env.PHP_VERSION }}"
     runs-on: ubuntu-latest
     steps: # tutti gli step saranno eseguiti nella stessa istanza virtuale
-      - name: Setup PHP 5.4
+      - name: Setup PHP ${{ env.PHP_VERSION }}
         uses: shivammathur/setup-php@v2 # "setup-php" è un'azione di GitHub che permette di installare versioni specifiche di PHP
         with:
-          php-version: "5.4" # versione di PHP da installare
+          php-version: ${{ env.PHP_VERSION }} # versione di PHP da installare
 
       - name: Check PHP version
         run: |
           bash --version
           php -v
-          files=$(php -v | grep "PHP 5.4" || false)
-          if [ $files && $files  == *"PHP 5.4"* ]; then
-            echo "❌ No PHP 5.4 installed"
-            exit 1
+          if php -v | grep -q "PHP $PHP_VERSION"; then
+            echo "✓ PHP $PHP_VERSION is installed"
           else
-            echo $files 
-            echo "✓ PHP 5.4 is installed"
+            echo "❌ PHP $PHP_VERSION not installed"
+            exit 1
           fi
+          
 
-      - name: About PHP 5.4
-        run: echo "🐘 PHP 5.4 is so old, it probably still thinks the internet is a fad!"
+      - name: About PHP ${{ env.PHP_VERSION }}
+        run: echo "🐘 PHP $PHP_VERSION is so old, it probably still thinks the internet is a fad!"
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,7 +41,7 @@ jobs:
 
       - name: Run PHP Syntax Check for ACM Files
         run: |
-          find_syntax_mistake=false
+          find_syntax_mistake=0
 
           git fetch origin
           files=$(git diff origin/main --name-only --diff-filter=ACM | grep '\.php$' || true)
@@ -53,24 +57,24 @@ jobs:
             echo "$files"
           fi
 
-          # echo "🔷🔶"
           for file in $files; do
             error_file=$(php -l "$file")
             if ! echo "$error_file" | grep -q "No syntax errors"; then
               echo "⚠️ found error - path: $file"
               echo "log: $error_file"
-              find_syntax_mistake=true
+              find_syntax_mistake=1
             else
               echo "No syntax errors in $file"
             fi
           done
 
-          if [ "$find_syntax_mistake" = true ]; then
+          if [ "$find_syntax_mistake" -eq 1 ]; then
+            echo "🔍 Checked $(echo "$files" | wc -l) PHP files."
             echo "❌ Found Compatibility Error. Solve them before merging."
             echo "TIP 1: Check if you have spaces in file .php name."
-            echo "TIP 2: Code might works but is not compatible with PHP 5.4"
+            echo "TIP 2: Code might works but is not compatible with PHP $PHP_VERSION"
             echo "TIP 3: Check if all edited/added files are in the list above (used for check compatibility)."
-            echo "TIP 4: is you use PHP 5.2, some code could still not works."
+            echo "TIP 4: Check if you are using PHP $PHP_VERSION."
             git diff origin/main --name-only --diff-filter=ACM | grep '\.php$'
             exit 1
           else
