@@ -31,7 +31,7 @@ on:
 
 jobs:
   call-compatibility:
-    uses: gabrielemartire/php-compatibility-check/.github/workflows/php-compatibility.yml@main
+    uses: gabrielemartire/php-compatibility-check/.github/workflows/php-compatibility-check.yml@main
     with:
       php-version: '5.4'
 ```
