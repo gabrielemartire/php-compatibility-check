@@ -2,27 +2,26 @@
 
 [![PHP 5.4 Compatibility](https://img.shields.io/badge/PHP-Legacy-blue?logo=php)](https://www.php.net/releases/5_4_0.php)
 
-> Un workflow GitHub Actions pensato per progetti **PHP legacy**, che controlla la compatibilità del codice con versioni più vecchie di PHP (es. 5.4). Utile per repository storiche o sistemi che devono mantenere la compatibilità con ambienti datati.
+> A GitHub Actions workflow designed for legacy PHP projects, which checks code compatibility with older PHP versions (e.g., 5.4). Useful for historical repositories or systems that must maintain compatibility with outdated environments.
 
----
+## How It Works
 
-## 🚀 Come funziona
+The workflow:
+1. Installs the **specified legacy PHP version** (e.g., 5.4).
+2. Verifies that the version is installed correctly.
+3. Retrieves `.php` files that have been added, modified, or copied compared to the `main` branch.
+```bash 
+$(git diff origin/main --name-only --diff-filter=ACM | grep '\.php$' || true)
+```
+5. Performs a **syntax check (`php -l`)** on each file.
+6. If errors or incompatibilities are found, it **reporting the problematic files**.
 
-Il workflow:
+> [!NOTE]
+> It also includes several useful TIPS and explanatory comments in the code to help those working on legacy PHP projects.
 
-1. Installa **la versione di PHP legacy** specificata (es. 5.4).
-2. Verifica che la versione sia installata correttamente.
-3. Recupera i file `.php` aggiunti, modificati o copiati rispetto al branch `main`.
-4. Esegue un controllo di **sintassi (`php -l`)** su ogni file.
-5. Se trova errori o incompatibilità, **blocca il merge** segnalando i file problematici.
+## 🧩 Method 1 — Reusable Workflow
 
-Include anche diversi **TIP utili** e commenti esplicativi nel codice, per aiutare chi lavora su progetti PHP legacy.
-
----
-
-## 🧩 Modalità 1 — Reusable Workflow (consigliata)
-
-1. Dalla tua repository, crea un file come:
+1. In your repository, create a file like:
    `.github/workflows/php-check.yml`
 
 ```yaml
@@ -40,17 +39,15 @@ jobs:
       php-version: '5.4'
 ```
 
-🔧 Personalizzazione:
+🔧 Customization:
 
-* `php-version` → con la versione di PHP che vuoi testare (es. `6.2`, `7.1`, ecc.)
+* `php-version` → with the PHP version you want to test (e.g. `6.2`, `7.1`, etc.)
 
----
+## 🧠 Method 2 — Direct Use in Your Repository
 
-## 🧠 Modalità 2 — Uso diretto nella propria repository
+If you prefer to use it directly in the same legacy PHP repo, just copy the file into the `.github/workflows` folder of your project `php-compatibility-check.yml`
 
-Se vuoi invece usarlo direttamente nella stessa repo PHP legacy, ti basta copiare il file in `.github/workflows` della tua cartella progetto `php-compatibility-check.yml`
-
-cambiando il blocco `on:` in questo modo:
+by changing the `on:` block as follows:
 
 ```yaml
 on:
@@ -60,9 +57,9 @@ on:
 ```
 
 > [!NOTE]
-> questo avvira' il check compatibili ad ogni push, escluso su main
+> This will run the compatibility check on every push, excluding the main branch.
 
-e lasciare tutto il resto invariato. Se serve modifica la versione da testare cambiando questa variabile all’inizio:
+_and leave everything else unchanged._ If needed, modify the version to be tested by changing this variable at the beginning:
 
 ```yaml
 env:
@@ -71,7 +68,8 @@ env:
 
 ---
 
-## ✅ Esempio di output
+## ✅ Example Output
+
 
 ```text
 From https://github.com/<ORG>/<REPO>
@@ -82,7 +80,6 @@ No syntax errors in main/users/new.php
 ✅ No syntax errors found in any PHP files.
 ```
 
-#### ERRORE
 ```bash 
 From https://github.com/<ORG>/<REPO>
  * [new branch]      add-new-elements        -> origin/add-new-elements
@@ -95,34 +92,23 @@ Error: Process completed with exit code 255.
 
 ---
 
-## 💬 Core
 
-```bash 
-$(git diff origin/main --name-only --diff-filter=ACM | grep '\.php$' || true)
-```
+## 💬 Suggestions
 
----
-
-## 💬 Suggerimenti
-
-* Evita spazi nei nomi dei file `.php`.
-* Anche se il codice funziona in versioni moderne, può non essere compatibile con versioni PHP legacy come la 5.4.
-* Perfetto per repository storiche, sistemi datati o ambienti di validazione.
-* I messaggi finali del workflow includono **TIP automatici** con possibili cause d’errore.
-
----
+* Avoid spaces in `.php` file names.
+* Even if the code works in modern versions, it may not be compatible with legacy PHP versions like 5.4.
+* Perfect for historical repositories, outdated systems, or validation environments.
+* The final workflow messages include automatic TIPS with possible causes of error.
 
 ## Badge
 
 <img width="220" height="30" alt="image" src="https://github.com/user-attachments/assets/b9ba542c-fdde-4ece-a67c-c360912a5347" />
 
-
 <img width="226" height="28" alt="image" src="https://github.com/user-attachments/assets/7ba8598d-b9ca-4dd8-b12e-be3ba0fc0c9e" />
 
----
 
-🙏 Ringraziamenti
+🙏 Acknowledgments
 
-Un grazie speciale al progetto shivammathur/setup-php — una delle azioni fondamentali che rendono possibile gestire versioni di PHP legacy su GitHub Actions. 💙
+Special thanks to the shivammathur/setup-php project — one of the fundamental actions that makes it possible to manage legacy PHP versions on GitHub Actions. 💙
 
 👷‍♂️ Made for developers who still use PHP legacy.
