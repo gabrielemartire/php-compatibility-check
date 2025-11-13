@@ -13,8 +13,8 @@ The workflow:
 ```bash 
 $(git diff origin/main --name-only --diff-filter=ACM | grep '\.php$' || true)
 ```
-5. Performs a **syntax check (`php -l`)** on each file.
-6. If errors or incompatibilities are found, it **reporting the problematic files**.
+4. Performs a **syntax check (`php -l`)** on each file.
+5. If errors or incompatibilities are found, it **reporting the problematic files**.
 
 > [!NOTE]
 > It also includes several useful TIPS and explanatory comments in the code to help those working on legacy PHP projects.
