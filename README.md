@@ -16,7 +16,7 @@ $(git diff origin/main --name-only --diff-filter=ACM | grep '\.php$' || true)
 4. Performs a **syntax check (`php -l`)** on each file.
 5. If errors or incompatibilities are found, it **reporting the problematic files**.
 
-## 🧩 Method 1 — Reusable Workflow
+##  Method 1 — Reusable Workflow
 
 1. In your repository, create a file like:
    `.github/workflows/php-check.yml`
@@ -40,7 +40,7 @@ jobs:
 
 * `php-version` → with the PHP version you want to test (e.g. `6.2`, `7.1`, etc.)
 
-## 🧠 Method 2 — Direct Use in Your Repository
+## Method 2 — Direct Use in Your Repository
 
 If you prefer to use it directly in the same legacy PHP repo, just copy the file into the `.github/workflows` folder of your project `php-compatibility-check.yml`
 
@@ -65,7 +65,7 @@ env:
 
 ---
 
-## ✅ Example Output
+## Example Output
 
 
 ```text
@@ -90,7 +90,7 @@ Error: Process completed with exit code 255.
 ---
 
 
-## 💬 Suggestions
+## Suggestions
 
 Add to your README.md the badges
 _in Action tabs_
@@ -104,7 +104,7 @@ _in Action tabs_
 * Perfect for historical repositories, outdated systems, or validation environments.
 * The final workflow messages include automatic TIPS with possible causes of error.
 
-## 🙏 Acknowledgments
+## 💙 Acknowledgments
 
 Special thanks to [shivammathur](https://github.com/shivammathur/setup-php) for `/setup-php` project — one of the fundamental actions that makes it possible to manage legacy PHP versions on GitHub Actions. 💙
 
