@@ -2,12 +2,12 @@
 
 [![PHP 5.4 Compatibility](https://img.shields.io/badge/PHP-Legacy-blue?logo=php)](https://www.php.net/releases/5_4_0.php)
 
-> A GitHub Actions workflow designed for legacy PHP projects, which checks code compatibility with older PHP versions (e.g., 5.4). Useful for historical repositories or systems that must maintain compatibility with outdated environments.
+> A GitHub Actions workflow designed for legacy PHP projects, which checks code compatibility with older PHP versions. Useful for historical repositories or systems that must maintain compatibility with outdated environments.
 
 ## How It Works
 
 The workflow:
-1. Installs the **specified legacy PHP version** (e.g., 5.4).
+1. Installs the **specified legacy PHP version**.
 2. Verifies that the version is installed correctly.
 3. Retrieves `.php` files that have been added, modified, or copied compared to the `main` branch.
 ```bash 
@@ -36,6 +36,9 @@ jobs:
       php-version: '5.4'
 ```
 
+> [!NOTE]
+> This will run the compatibility check on every push, excluding the main branch.
+
 🔧 Customization:
 
 * `php-version` → with the PHP version you want to test (e.g. `6.2`, `7.1`, etc.)
@@ -62,7 +65,10 @@ _and_, changing the `env:` block as follows:
 env:
   PHP_VERSION: '1.1'
 ```
-_(e.g. 1.1) here you can use your remote php legacy version, **the version to be tested**_
+
+🔧 Customization:
+
+* `PHP_VERSION` → with the PHP version you want to test (e.g. `6.2`, `5.4`)
 
 _and leave everything else unchanged._
 
