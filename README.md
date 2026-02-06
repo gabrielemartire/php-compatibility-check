@@ -35,7 +35,7 @@ jobs:
      steps:
        - uses: actions/checkout@v4
          with:
-           fetch-depth: 0  # importante per il git diff
+           fetch-depth: 0  #  this is for git diff
       
        - name: Check PHP 7.4 Compatibility
          uses: tuo-username/nome-repo@v1
